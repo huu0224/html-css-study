@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 선택자 연습</title>
+    <style>
+        * {box-sizeing: border-box;}
+        .card {
+            background-color: #ccc;
+            border-radius: 8px;
+        }
+        #total {
+            background-color: #142a3c;
+        }
+        #sale {
+            background-color: #215475;
+        }
+        #rental {
+            background-color: #f66b0c;
+        }
+        /* h1 { color: white;}
+        p { coloer: white} */
+        h1, p { color: white}
+    </style>
+</head>
+<body>
+    <div class="card" id="total">
+        <img src="새연습/images/icon/1.png" alt="icon" title="house">
+        <div>
+            <h1>360</h1>
+            <p>재고</p>
+        </div>
+     </div>
+     <div class="card" id="sale">
+        <img src="새연습\images\icon\2.png" alt="icon" title="cart">
+        <div>
+            <h1>110</h1>
+            <p>판매</p>
+        </div>
+     </div>
+
+     <div class="card" id="rental">
+        <img src="새연습/images/icon/3.png" alt="icon" title="person">
+        <div>
+            <h1>250</h1>
+            <p>랜탈</p>
+        </div>
+    </div>
+</body>
+</html>
