@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html long="k">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문서 연습</title>
+</head>
+<body>
+    <h1>주문서</h1>
+    <form action="" method="get">
+        <div>
+            <label for="order-name">이름</label>
+            <input type="text" name="order-name" id="order-name">
+        </div>
+        <div>
+            <label for="order-email">이메일</label>
+            <input type="text" name="order-email" id="order-email" disabled value="aaa@aaa.
+            com">
+            <div>
+                <label for="order-addrress-1">주소</label>
+                <input type="text" name="order-address-1" id="order-address-1">
+                <input type="text" name="order-address-2" id="order-address-2"> 
+            </div>
+            <div>
+                <label for="order-city">도시</label>
+                <input type="text" name="order-city" id="order-city">
+            </div>
+            <div>
+                <label for="order-state">시군</label>
+                <select name="order-state" id="order-state">
+                    <option value="강남구">강남구</option>
+                    <option value="강동구">강동구</option>
+                    <option value="강서구">강서구</option>
+                </select>
+            </div>
+            <div>
+                <label for="order-zip">우편번호</label>
+                <input type="text" name="order-zip" id="order-zip">
+            </div>
+        </div>
+        <div>
+            <label>어떤 색으로 보내드릴까요?</label>
+            <label for="sample-white">
+                <input type="checkbox" name="order-color-sample" id="sample-white" value="white" disabled> white
+            </label>
+            <label for="sample-magenta">
+                <input type="checkbox" name="order-color-sample" id="sample-magenta" value="magenta"> Magenta
+            </label>
+            <label for="sample-coral">
+                <input type="checkbox" name="order-color-sample" id="sample-coral" value="coral"> burgundy
+            </label>
+            <label for="sample-burgundy">
+                <input type="checkbox" name="order-color-sample" id="sample-burgundy" value="burgundy"> Burgundy
+            </label>
+            <label for="sample-charcoal">
+                <input type="checkbox" name="order-color-sample" id="sample-charcoal" value="charcoal"> Charcoal
+            </label>
+        </div>
+        <div>
+            <label>인원이 얼마나 되나요?</label>
+            <label for="team-small">
+                <input type="radio" name="team-size" id="team-small" value="1-5" checked>1-5 명
+            </label>
+            <label for="team-medium">
+                <input type="radio" name="team-size" id="team-medium" value="6-10">6-10 명
+            </label>
+            <label for="team-large">
+                <input type="radio" name="team-size" id="team-large" value="10+">10명 초과
+            </label> 
+        </div>
+        <div>
+            <label for="order-comments">전하실 말씀</label>
+            <textarea name="order-comments" id="order-comments" cols="50" rows="5"></textarea>
+        </div>
+        <div>
+            <label for="offer-sign-up">
+                <input type="checkbox" name="offer-sign-up" id="offer-sign-up">개인정보 활용동의
+            </label>
+            <!-- <button form="order-form">주문하기</button> -->
+             <input type="submit" value="주문하기">
+        </div>
+    </div>
+   </form>
+</body>
+</html>
