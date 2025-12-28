@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Snap Portfolio</title>
+    <style>
+        /* 1. 스크롤 스냅 설정 (브라우저 기본 효과) */
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        /* 2. 각 섹션을 화면 가득 채우고 스냅 지점으로 설정 */
+        section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 배경 장식 (애니메이션 효과) */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        /* 프로젝트 카드 (글래스모피즘 스타일) */
+        .card {
+            width: 80%;
+            max-width: 900px;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        h2 { font-size: 4rem; margin: 0; background: linear-gradient(to right, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p { font-size: 1.25rem; color: #94a3b8; line-height: 1.6; margin-top: 20px; }
+        
+        .tag { display: inline-block; padding: 6px 12px; background: #3b82f6; border-radius: 8px; font-weight: bold; font-size: 0.9rem; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="blob"></div>
+
+    <section>
+        <div class="card">
+            <span class="tag">UI/UX Interaction</span>
+            <h2>01. Smooth Transition</h2>
+            <p>스크롤을 살짝만 내려보세요. 화면이 다음 프로젝트로 자석처럼 달라붙습니다. 자바스크립트 없이 CSS만으로 구현한 고성능 인터랙션입니다.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="card">
+            <span class="tag">Performance Optimization</span>
+            <h2>02. Glassmorphism</h2>
+            <p>배경의 블러 효과와 투명한 카드는 모던한 웹 디자인의 정석입니다. GPU 가속을 활용하여 끊김 없는 시각적 경험을 제공합니다.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="card">
+            <span class="tag">Data Visualization</span>
+            <h2>03. Adaptive Layout</h2>
+            <p>어떤 기기에서도 완벽한 비율을 유지합니다. 기업이 선호하는 견고하고 확장성 있는 프론트엔드 코드를 작성합니다.</p>
+        </div>
+    </section>
+
+</body>
+</html>
