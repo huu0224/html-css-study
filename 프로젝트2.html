@@ -1,0 +1,40 @@
+<div class="theme-card" id="card">
+    <div class="glass-content">
+        <h2>Light / Dark Mode</h2>
+        <p>클릭하여 테마를 전환해 보세요.</p>
+        <button class="toggle-btn" onclick="toggleTheme()">Switch Mode</button>
+    </div>
+</div>
+
+<style>
+    :root { --bg: #f0f2f5; --card-bg: rgba(255, 255, 255, 0.7); --text: #333; }
+    [data-theme="dark"] { --bg: #0f172a; --card-bg: rgba(30, 41, 59, 0.7); --text: #f8fafc; }
+
+    body { background-color: var(--bg); transition: 0.5s; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    
+    .theme-card {
+        width: 350px; height: 200px;
+        background: var(--card-bg);
+        backdrop-filter: blur(15px); /* 유리 효과 */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        display: flex; justify-content: center; align-items: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        color: var(--text);
+    }
+
+    .toggle-btn {
+        padding: 10px 20px; border: none; border-radius: 50px;
+        background: #3b82f6; color: white; cursor: pointer;
+        font-weight: bold; transition: 0.3s;
+    }
+    .toggle-btn:hover { transform: scale(1.05); background: #2563eb; }
+</style>
+
+<script>
+    function toggleTheme() {
+        const body = document.body;
+        const currentTheme = body.getAttribute('data-theme');
+        body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+    }
+</script>
