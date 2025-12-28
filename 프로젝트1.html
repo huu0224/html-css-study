@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Developer Portfolio</title>
+    <style>
+        :root {
+            --primary-color: #00d2ff;
+            --secondary-color: #3a7bd5;
+        }
+
+        body {
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        /* 카드 컨테이너: 3D 효과를 위한 원근감 설정 */
+        .card-container {
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 320px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* 마우스 호버 시 기울기 효과 */
+        .card:hover {
+            transform: rotateY(15deg) rotateX(10deg);
+            border: 1px solid var(--primary-color);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        .card:hover::before {
+            opacity: 0.4;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            background: #334155;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            transform: translateZ(50px); /* 이미지 부풀리기 */
+        }
+
+        .info {
+            text-align: center;
+            transform: translateZ(30px);
+        }
+
+        .tech-stack {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            transform: translateZ(20px);
+        }
+
+        .tag {
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card-container">
+    <div class="card">
+        <div class="profile-img">🚀</div>
+        <div class="info">
+            <h2 style="margin:0;">허윤정</h2>
+            <p style="color: #94a3b8;">Frontend Engineer</p>
+            <p style="font-size: 0.9rem; padding: 0 20px;">"사용자 경험을 코드로 설계하는<br>디테일한 개발자입니다."</p>
+        </div>
+        <div class="tech-stack">
+            <span class="tag">React</span>
+            <span class="tag">Next.js</span>
+            <span class="tag">Tailwind</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 단순 CSS 호버 외에 마우스 위치에 따라 각도가 변하는 디테일 추가 가능
+    const card = document.querySelector('.card');
+    
+    // (여기에 고도화된 JS 마우스 트래킹 로직을 추가하면 더 '프론트엔드'답습니다)
+</script>
+
+</body>
+</html>
