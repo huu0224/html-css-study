@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Creative Reveal Effect</title>
+    <style>
+        :root { --cursor-size: 300px; }
+        body { margin: 0; background: #050505; color: #222; font-family: 'Pretendard', sans-serif; overflow: hidden; height: 100vh; }
+
+        /* 배경에 숨겨진 텍스트 (평소에는 어두워서 잘 안 보임) */
+        .content-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; user-select: none;
+        }
+
+        .base-text { font-size: 5rem; font-weight: 900; color: #111; transition: 0.3s; }
+
+        /* 마우스 조명 효과 레이어 (이 영역만 밝게 보임) */
+        .reveal-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; pointer-events: none;
+            background: #050505;
+            /* 핵심: 마스크 효과 */
+            -webkit-mask-image: radial-gradient(circle var(--cursor-size) at var(--x, 0) var(--y, 0), black 0%, transparent 100%);
+            mask-image: radial-gradient(circle var(--cursor-size) at var(--x, 0) var(--y, 0), black 0%, transparent 100%);
+        }
+
+        .highlight-text {
+            font-size: 5rem; font-weight: 900;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5, #ff00c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .desc { font-size: 1.5rem; color: white; margin-top: 20px; max-width: 600px; }
+
+        /* 커서 포인터 디테일 */
+        .cursor-dot {
+            position: fixed; width: 10px; height: 10px; background: white;
+            border-radius: 50%; pointer-events: none; z-index: 100;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="dot"></div>
+
+<div class="content-layer">
+    <div class="base-text">UI/UX LOGIC</div>
+    <div style="color: #111; font-size: 1.2rem;">마우스를 움직여 숨겨진 가치를 찾아보세요</div>
+</div>
+
+<div class="reveal-layer" id="reveal">
+    <div class="highlight-text">CREATIVE CODE</div>
+    <div class="desc">
+        사용자의 행동에 반응하는 인터랙티브 웹.<br>
+        성능 최적화와 시각적 즐거움을 동시에 선사합니다.
+    </div>
+</div>
+
+<script>
+    const reveal = document.getElementById('reveal');
+    const dot = document.getElementById('dot');
+
+    window.addEventListener('mousemove', (e) => {
+        // CSS 변수를 업데이트하여 마스크 위치 이동
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        reveal.style.setProperty('--x', `${x}px`);
+        reveal.style.setProperty('--y', `${y}px`);
+        
+        // 커서 점 이동
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+    });
+</script>
+
+</body>
+</html>
