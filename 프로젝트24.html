@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE 4D Geometry Projection</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Orbitron', sans-serif; }
+        canvas { filter: drop-shadow(0 0 15px #00d2ff); }
+        .ui { position: absolute; bottom: 40px; color: #00d2ff; text-align: center; pointer-events: none; letter-spacing: 4px; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="ui">DIMENSION: 4D TESSERACT HYPERCUBE</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+
+    // 4차원 큐브의 16개 꼭짓점 정의
+    const points = [];
+    for (let i = 0; i < 16; i++) {
+        const x = i & 1 ? 1 : -1;
+        const y = i & 2 ? 1 : -1;
+        const z = i & 4 ? 1 : -1;
+        const w = i & 8 ? 1 : -1;
+        points.push([x, y, z, w]);
+    }
+
+    function rotate4D(point, angle) {
+        const [x, y, z, w] = point;
+        // XY 평면 회전
+        const x1 = x * Math.cos(angle) - y * Math.sin(angle);
+        const y1 = x * Math.sin(angle) + y * Math.cos(angle);
+        // ZW 평면 회전
+        const z1 = z * Math.cos(angle) - w * Math.sin(angle);
+        const w1 = z * Math.sin(angle) + w * Math.cos(angle);
+        return [x1, y1, z1, w1];
+    }
+
+    function project(point) {
+        const [x, y, z, w] = point;
+        const distance = 3;
+        // 4D -> 3D 투영
+        const wScale = 1 / (distance - w);
+        const x3 = x * wScale;
+        const y3 = y * wScale;
+        const z3 = z * wScale;
+        // 3D -> 2D 투영
+        const zScale = 1 / (distance - z3);
+        const x2 = x3 * zScale * 600 + canvas.width / 2;
+        const y2 = y3 * zScale * 600 + canvas.height / 2;
+        return [x2, y2];
+    }
+
+    function draw() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.strokeStyle = '#00d2ff';
+        ctx.lineWidth = 1.5;
+
+        const projected = points.map(p => project(rotate4D(p, angle)));
+
+        // 16개 점 사이의 연결선 그리기 (거리가 2인 점들끼리 연결)
+        for (let i = 0; i < 16; i++) {
+            for (let j = i + 1; j < 16; j++) {
+                let distance = 0;
+                for (let k = 0; k < 4; k++) {
+                    distance += Math.pow(points[i][k] - points[j][k], 2);
+                }
+                if (Math.round(distance) === 4) {
+                    ctx.beginPath();
+                    ctx.moveTo(projected[i][0], projected[i][1]);
+                    ctx.lineTo(projected[j][0], projected[j][1]);
+                    ctx.stroke();
+                }
+            }
+        }
+        angle += 0.02;
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+</script>
+</body>
+</html>
