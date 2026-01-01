@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Harmonic Master</title>
+    <style>
+        body { margin: 0; background: #050505; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { display: block; filter: drop-shadow(0 0 10px #00d2ff); }
+        .ui { position: absolute; top: 40px; color: #00d2ff; font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="ui">HARMONIC RESONANCE v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let t = 0;
+
+    function draw() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        ctx.fillStyle = 'rgba(5, 5, 5, 0.05)'; // 잔상 효과
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.beginPath();
+        ctx.strokeStyle = '#00d2ff';
+        ctx.lineWidth = 2;
+
+        // 마우스 위치에 따른 주파수(Frequency) 비율 조절
+        const freqX = (window.mouseX || 0) / 100 + 3;
+        const freqY = (window.mouseY || 0) / 100 + 2;
+
+        for (let i = 0; i < 200; i++) {
+            const angle = t + i * 0.05;
+            const x = Math.sin(angle * freqX) * (canvas.height / 3);
+            const y = Math.cos(angle * freqY) * (canvas.height / 3);
+            
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+
+        ctx.stroke();
+        t += 0.02;
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+        window.mouseX = e.clientX;
+        window.mouseY = e.clientY;
+    });
+
+    draw();
+</script>
+</body>
+</html>
