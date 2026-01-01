@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Master Finale</title>
+    <style>
+        body { margin: 0; background: #020617; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { display: block; }
+        .label {
+            position: absolute; top: 40px; color: #38bdf8;
+            font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none;
+            text-transform: uppercase; opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="label">Connectivity Architecture v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const maxDistance = 150; // 연결될 수 있는 최대 거리
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        const count = Math.floor((canvas.width * canvas.height) / 9000); // 밀도 최적화
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5
+            });
+        }
+    }
+
+    function draw() {
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < particles.length; i++) {
+            let p1 = particles[i];
+            p1.x += p1.vx; p1.y += p1.vy;
+
+            // 경계 처리
+            if (p1.x < 0 || p1.x > canvas.width) p1.vx *= -1;
+            if (p1.y < 0 || p1.y > canvas.height) p1.vy *= -1;
+
+            // 입자 그리기
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(p1.x, p1.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 거리 기반 선 연결 (이중 루프 최적화가 필요한 핵심 포인트)
+            for (let j = i + 1; j < particles.length; j++) {
+                let p2 = particles[j];
+                let dx = p1.x - p2.x;
+                let dy = p1.y - p2.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < maxDistance) {
+                    ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist / maxDistance})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>
