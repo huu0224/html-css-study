@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Master: Fluid Dynamics</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { display: block; filter: saturate(1.5) brightness(1.2); }
+        .ui { position: absolute; top: 40px; color: #fff; font-family: 'Inter', sans-serif; letter-spacing: 5px; pointer-events: none; opacity: 0.3; }
+    </style>
+</head>
+<body>
+
+<div class="ui">PHYSICS: FLUID DYNAMICS v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const res = 10; // 그리드 해상도
+    let cols, rows;
+    let grid = [];
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        cols = Math.ceil(canvas.width / res);
+        rows = Math.ceil(canvas.height / res);
+        grid = new Array(cols * rows).fill(0).map(() => ({ vx: 0, vy: 0, density: 0 }));
+    }
+
+    window.addEventListener('mousemove', (e) => {
+        const x = Math.floor(e.clientX / res);
+        const y = Math.floor(e.clientY / res);
+        const index = x + y * cols;
+        if (grid[index]) {
+            grid[index].vx += e.movementX * 2;
+            grid[index].vy += e.movementY * 2;
+            grid[index].density = 1;
+        }
+    });
+
+    function draw() {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < grid.length; i++) {
+            const cell = grid[i];
+            const x = (i % cols) * res;
+            const y = Math.floor(i / cols) * res;
+
+            // 유체 확산 및 감쇄 로직 (간소화)
+            cell.density *= 0.95;
+            cell.vx *= 0.98;
+            cell.vy *= 0.98;
+
+            if (cell.density > 0.01) {
+                ctx.fillStyle = `rgba(0, 210, 255, ${cell.density})`;
+                ctx.fillRect(x, y, res, res);
+            }
+        }
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>
