@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Masterpiece: Chaos Theory</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { filter: drop-shadow(0 0 10px #ff0055); }
+        .ui { position: absolute; bottom: 30px; color: #ff0055; font-family: 'Courier New', monospace; letter-spacing: 3px; pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="ui">ALGORITHM: LORENZ ATTRACTOR (CHAOS THEORY)</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let x = 0.01, y = 0, z = 0;
+    const a = 10, b = 28, c = 8 / 3; // 로렌츠 상수
+    const dt = 0.01;
+    let points = [];
+
+    function draw() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // 로렌츠 미분 방정식 연산
+        let dx = (a * (y - x)) * dt;
+        let dy = (x * (b - z) - y) * dt;
+        let dz = (x * y - c * z) * dt;
+        x += dx; y += dy; z += dz;
+
+        // 3D 궤적 데이터 저장
+        points.push({x, y, z});
+        if (points.length > 2000) points.shift();
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.scale(12, 12); // 스케일 조정
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#ff0055';
+        ctx.lineWidth = 0.5;
+
+        for (let i = 1; i < points.length; i++) {
+            // 단순 3D -> 2D 투영 (Z축을 깊이로 활용)
+            const p = points[i];
+            ctx.lineTo(p.x, p.y); 
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+</script>
+</body>
+</html>
