@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Masterpiece: King's Dream</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { filter: contrast(1.5) brightness(1.2) saturate(1.5); }
+        .ui { position: absolute; top: 40px; color: #ff00ff; font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none; opacity: 0.4; }
+    </style>
+</head>
+<body>
+
+<div class="ui">CHAOS THEORY: KING'S DREAM ATTRACTOR</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let x = 0.1, y = 0.1;
+    let a = 2.87, b = -2.34, c = 1.32, d = -1.21; // 초기 상수
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+        // 마우스 위치에 따라 상수를 미세하게 변화시켜 패턴 왜곡
+        a = (e.clientX / window.innerWidth) * 4 - 2;
+        b = (e.clientY / window.innerHeight) * 4 - 2;
+    });
+
+    function draw() {
+        // 배경을 지우지 않고 잔상을 남김
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.beginPath();
+        ctx.strokeStyle = `hsla(${(a+b)*50}, 80%, 60%, 0.5)`;
+
+        // 한 프레임당 5000개의 점을 계산하여 렌더링 (고성능 수치 연산)
+        for (let i = 0; i < 5000; i++) {
+            let nextX = Math.sin(a * y) + c * Math.cos(a * x);
+            let nextY = Math.sin(b * x) + d * Math.cos(b * y);
+            x = nextX;
+            y = nextY;
+
+            let screenX = x * (canvas.height / 5);
+            let screenY = y * (canvas.height / 5);
+            ctx.rect(screenX, screenY, 0.5, 0.5);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>
