@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Masterpiece: The Final Echo</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { filter: saturate(1.5) contrast(1.2); }
+        .ui { position: absolute; top: 40px; color: #00ffcc; font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none; opacity: 0.4; }
+    </style>
+</head>
+<body>
+
+<div class="ui">FINALITY: GEOMETRIC FEEDBACK v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function draw() {
+        // 핵심 로직: 이전 프레임을 캡처하여 미세하게 변형 후 다시 그림
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(0.01); // 매 프레임 0.01 라디안 회전
+        ctx.scale(0.99, 0.99); // 매 프레임 1% 축소
+        ctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+        ctx.restore();
+
+        // 새로운 소스 소스 (입자 또는 선)
+        ctx.strokeStyle = `hsla(${angle}, 70%, 50%, 0.8)`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const x = Math.cos(angle * 0.05) * 200;
+        const y = Math.sin(angle * 0.03) * 200;
+        ctx.strokeRect(canvas.width / 2 + x, canvas.height / 2 + y, 50, 50);
+
+        angle += 2;
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>
