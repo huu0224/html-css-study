@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Masterpiece: Tensor Flow</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { filter: contrast(1.2) brightness(1.2); }
+        .ui { position: absolute; top: 40px; color: #6366f1; font-family: 'Inter', sans-serif; letter-spacing: 5px; pointer-events: none; opacity: 0.4; }
+    </style>
+</head>
+<body>
+
+<div class="ui">VECTOR FIELD DYNAMICS v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const numParticles = 1000;
+    const noiseScale = 0.01;
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < numParticles; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: 0, vy: 0,
+                life: Math.random() * 100 + 100
+            });
+        }
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function draw() {
+        // 잔상 효과: 이전 프레임을 완전히 지우지 않음
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+            // 현재 위치에서의 흐름 각도 계산 (간소화된 노이즈 필드)
+            const angle = (Math.sin(p.x * noiseScale) + Math.cos(p.y * noiseScale)) * Math.PI;
+            
+            p.vx = Math.cos(angle) * 2;
+            p.vy = Math.sin(angle) * 2;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = `hsla(${angle * 50 + 200}, 70%, 60%, 0.5)`;
+            ctx.moveTo(p.x, p.y);
+            p.x += p.vx;
+            p.y += p.vy;
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+
+            // 수명 관리 및 경계 처리
+            p.life--;
+            if (p.life < 0 || p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
+                p.x = Math.random() * canvas.width;
+                p.y = Math.random() * canvas.height;
+                p.life = Math.random() * 100 + 100;
+            }
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>
