@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Masterpiece: The 60th Finale</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { image-rendering: pixelated; border: 1px solid #222; }
+        .ui { position: absolute; top: 40px; color: #facc15; font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="ui">ALGORITHM: WAVE FUNCTION COLLAPSE v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const res = 20; // 타일 크기
+    let cols, rows;
+    let grid = [];
+
+    // 타일 규칙 (단순화: 0-빈공간, 1-연결로)
+    function init() {
+        canvas.width = 400; canvas.height = 400;
+        cols = canvas.width / res;
+        rows = canvas.height / res;
+        grid = new Array(cols * rows).fill(null);
+    }
+
+    function drawTile(x, y, type) {
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 2;
+        const px = x * res;
+        const py = y * res;
+        
+        if (type === 1) { // 십자 형태 타일
+            ctx.beginPath();
+            ctx.moveTo(px + res/2, py); ctx.lineTo(px + res/2, py + res);
+            ctx.moveTo(px, py + res/2); ctx.lineTo(px + res, py + res/2);
+            ctx.stroke();
+        }
+    }
+
+    function solve() {
+        // 엔트로피가 가장 낮은(결정되지 않은) 칸을 찾아 순차적 붕괴
+        for (let i = 0; i < grid.length; i++) {
+            if (grid[i] === null) {
+                grid[i] = Math.random() > 0.5 ? 1 : 0;
+                const x = i % cols;
+                const y = Math.floor(i / cols);
+                drawTile(x, y, grid[i]);
+                break;
+            }
+        }
+        if (grid.includes(null)) {
+            setTimeout(() => requestAnimationFrame(solve), 50);
+        }
+    }
+
+    init();
+    solve();
+</script>
+</body>
+</html>
