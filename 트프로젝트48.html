@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Finale: Quadtree Optimization</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { border: 1px solid #1e293b; }
+        .ui { position: absolute; top: 40px; color: #38bdf8; font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="ui">ALGORITHM: QUADTREE SPATIAL PARTITIONING</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const maxParticles = 300;
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = Array.from({ length: maxParticles }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4
+        }));
+    }
+
+    // 쿼드트리 재귀 분할 함수 (간소화)
+    function subdivide(x, y, w, h, depth) {
+        if (depth > 5) return;
+
+        let count = 0;
+        particles.forEach(p => {
+            if (p.x >= x && p.x < x + w && p.y >= y && p.y < y + h) count++;
+        });
+
+        if (count > 4) { // 한 구역에 입자가 4개 이상이면 분할
+            ctx.strokeStyle = `rgba(56, 189, 248, ${0.1 + depth * 0.1})`;
+            ctx.strokeRect(x, y, w, h);
+            const hw = w / 2, hh = h / 2;
+            subdivide(x, y, hw, hh, depth + 1);
+            subdivide(x + hw, y, hw, hh, depth + 1);
+            subdivide(x, y + hh, hw, hh, depth + 1);
+            subdivide(x + hw, y + hh, hw, hh, depth + 1);
+        }
+    }
+
+    function draw() {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        subdivide(0, 0, canvas.width, canvas.height, 0);
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+</body>
+</html>
