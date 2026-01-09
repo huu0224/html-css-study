@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FE Finale: Boids Flocking</title>
+    <style>
+        body { margin: 0; background: #020617; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { filter: drop-shadow(0 0 10px #6366f1); }
+        .ui { position: absolute; top: 40px; color: #6366f1; font-family: 'JetBrains Mono', monospace; letter-spacing: 5px; pointer-events: none; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="ui">ALGORITHM: COLLECTIVE INTELLIGENCE v1.0</div>
+<canvas id="canvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let boids = [];
+    const numBoids = 150;
+
+    class Boid {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 4;
+            this.vy = (Math.random() - 0.5) * 4;
+        }
+        update() {
+            let cx = 0, cy = 0, avx = 0, avy = 0, sx = 0, sy = 0, neighbors = 0;
+            
+            boids.forEach(other => {
+                const d = Math.hypot(this.x - other.x, this.y - other.y);
+                if (other !== this && d < 100) {
+                    cx += other.x; cy += other.y;
+                    avx += other.vx; avy += other.vy;
+                    if (d < 30) { sx += this.x - other.x; sy += this.y - other.y; }
+                    neighbors++;
+                }
+            });
+
+            if (neighbors > 0) {
+                // 응집(Cohesion), 정렬(Alignment), 분리(Separation) 로직
+                this.vx += (cx / neighbors - this.x) * 0.005 + (avx / neighbors - this.vx) * 0.05 + sx * 0.05;
+                this.vy += (cy / neighbors - this.y) * 0.005 + (avy / neighbors - this.vy) * 0.05 + sy * 0.05;
+            }
+
+            const speed = Math.hypot(this.vx, this.vy);
+            if (speed > 4) { this.vx = (this.vx / speed) * 4; this.vy = (this.vy / speed) * 4; }
+            this.x += this.vx; this.y += this.vy;
+
+            // 경계 처리
+            if (this.x < 0) this.x = canvas.width; if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height; if (this.y > canvas.height) this.y = 0;
+        }
+        draw() {
+            const angle = Math.atan2(this.vy, this.vx);
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(angle);
+            ctx.fillStyle = '#6366f1';
+            ctx.beginPath();
+            ctx.moveTo(8, 0); ctx.lineTo(-4, 4); ctx.lineTo(-4, -4);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        boids = Array.from({ length: numBoids }, () => new Boid());
+    }
+
+    function draw() {
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        boids.forEach(b => { b.update(); b.draw(); });
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init(); draw();
+</script>
+</body>
+</html>
